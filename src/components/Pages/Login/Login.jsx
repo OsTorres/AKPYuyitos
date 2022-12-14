@@ -26,7 +26,7 @@ const Login = () => {
 
 	const handleSubmit = () => {
 		setIsLoading(true)
-		ApiRequest().post('/login/admin', bodyLogin, { withCredentials: true, headers: { "Content-Type": "application/json" }, })
+		ApiRequest().post('/login/admin-apk', bodyLogin, { withCredentials: true, headers: { "Content-Type": "application/json" }, })
 			.then(({ data }) => {
 				globalDispatch({
 					type: AUTH_TYPES.LOGIN_OK,
