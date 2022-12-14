@@ -6,6 +6,7 @@ import ApiRequest from '../../../helpers/axiosInstances'
 import { MainContext, APP_STATE, AUTH_TYPES } from '../../../Context/MainContext'
 import ToastAutoHide from '../../common/ToastAutoHide'
 import Page from '../../common/Page'
+import Swal from 'sweetalert2';
 
 const Login = () => {
 	const { globalDispatch } = useContext(MainContext)
@@ -33,14 +34,31 @@ const Login = () => {
 				})
 				setIsLoading(false)
 				push('/app')
+				if(data.message != undefined) {
+					Swal.fire({
+						position: 'top-end',
+						icon: 'error',
+						title: data.message,
+						showConfirmButton: true,
+						timer: 2500
+					})
+				}
+				
 			})
 			.catch(({ response }) => {
 				globalDispatch({ type: AUTH_TYPES.LOGIN_FAIL })
-				setMensaje({
-					ident: new Date().getTime(),
-					message: response.data,
-					type: 'error'
+				Swal.fire({
+					position: 'top-end',
+					icon: 'error',
+					title: response.message,
+					showConfirmButton: true,
+					timer: 2500
 				})
+				// setMensaje({
+				// 	ident: new Date().getTime(),
+				// 	message: response.data,
+				// 	type: 'error'
+				// })
 				setIsLoading(false)
 			})
 	}
@@ -128,13 +146,13 @@ const Login = () => {
 							>
 								Login
 							</Button>
-							<Grid container>
+							{/* <Grid container>
 								<Grid item xs>
 									<Link href="/login" variant="body2">
 										¿Olvidaste tu contraseña?
 									</Link>
 								</Grid>
-							</Grid>
+							</Grid> */}
 						</Box>
 					</Box>
 				</Grid>

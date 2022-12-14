@@ -117,13 +117,18 @@ const Productos = () => {
 	}
 
 	const initId = async (buscar) => {
-
 		if(buscar.length >= 2) {
-			const { data } = await ApiRequest().get(`/productos/${buscar}`)
+			const { data } = await ApiRequest().get(`/productos-filtro/${buscar}`)
 			setListadoProductos(data);	
 		} else {
 			init()
 		}
+	}
+
+	const disabledEliminarProducto = (e) => {
+		if(e == 0) {
+			return false;
+		} return true;
 	}
 
 	const columns = [
@@ -133,6 +138,7 @@ const Productos = () => {
         { field: 'descripcionMarca', headerName: 'Marca', width: 200 },
 		{ field: 'razonSocialProveedor', headerName: 'Razón social', width: 200 },
 		{ field: 'stockProducto', headerName: 'Stock', width: 200 },
+		{ field: 'stockCriticoProducto', headerName: 'Stock crítico', width: 200 },
 		{ field: 'precioCompraProductoFormat', headerName: 'Precio compra', width: 150 },
 		{ field: 'valorUnitarioVentaProductoFormat', headerName: 'Valor venta', width: 150 },
 		{
@@ -147,8 +153,10 @@ const Productos = () => {
 					}}>
 						<EditOutlined />
 					</Button>
-					<Button variant='danger' size='sm' onClick={() => {
-						eliminarProveedor(params.row.id);
+					<Button variant='danger' size='sm' 
+					disabled={disabledEliminarProducto(params.row.stockProducto)}
+					onClick={() => {
+						eliminarProducto(params.row.id);
 					}}>
 						<DeleteOutline />
 					</Button>
@@ -260,8 +268,8 @@ const Productos = () => {
 	//mensaje de eliminacion si se presiona el boton eliminar ejecuta la función de arriba que cambia el estado de un proveedor
 	const eliminarProducto = (id) => {
 		Swal.fire({
-			title: '¿Estas seguro?',
-			text: "¿Deseas eliminar este rubro?!",
+			title: '¿Estás seguro?',
+			text: "¿Deseas eliminar este producto?!",
 			icon: 'warning',
 			showCancelButton: true,
 			confirmButtonColor: '#3085d6',
@@ -572,7 +580,7 @@ const Productos = () => {
 														}
 														}
 														isInvalid={isError.idImpuesto}>
-											<option hidden value={0}>Seleccione un proveedor</option>
+											<option hidden value={0}>Seleccione un tipo de impuesto</option>
 											{
 												listadoImpuestos.map((item, index) => (
 													<option value={item.id} key={index}>{item.descripcionImpuesto}</option>
